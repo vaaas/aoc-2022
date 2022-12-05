@@ -85,3 +85,15 @@ export const take = n => function* (xs) {
 		i++
 	}
 }
+
+export const C = f => a => b => f(b)(a)
+
+export const T = x => f => f(x)
+
+export const duad_map2 = (f, g) => x => [f(x[0]), g(x[1])]
+
+export const mapN = fs => x => fs.map(T(x))
+
+export const get_from = o => k => o[k]
+
+export const duad_flip = x => [x[1], x[0]]
