@@ -69,3 +69,19 @@ export function pipe(x, ...fs) {
 export const compose = (...fs) => x => pipe(x, ...fs)
 
 export const print = x => { console.log(x) ; return x }
+
+export const sortBy = (f, reverse=false) => xs =>
+	Array.from(xs).sort(
+		reverse
+			? (a, b) => f(a) > f(b) ? -1 : 1
+			: (a, b) => f(a) < f(b) ? -1 : 1
+		)
+
+export const take = n => function* (xs) {
+	let i = 0
+	for (const x of xs) {
+		if (i === n) break
+		yield x
+		i++
+	}
+}
