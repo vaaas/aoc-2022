@@ -24,6 +24,20 @@ export const foldl = (f, i) => xs => {
 	return a
 }
 
+export const foldl1 = (f, i) => xs => {
+	const it = iter(xs)
+	let v = it.next()
+	if (v.done)
+		return i
+	let a = v.value
+	while (true) {
+		v = it.next()
+		if (v.done)
+			return a
+		a = f(a)(v.value)
+	}
+}
+
 export const sum = foldl(add, 0)
 
 export const iter = x => x[Symbol.iterator]()
@@ -50,6 +64,17 @@ export const optimum = f => xs => {
 export const map = f => function* (xs) {
 	for (const x of xs)
 		yield f(x)
+}
+
+export const filter = f => function* (xs) {
+	for (const x of xs)
+		if (f(x))
+			yield x
+}
+
+export const bind = f => function* (xs) {
+	for (const x of xs)
+		yield* f(x)
 }
 
 export function lt(a, b) {
@@ -97,3 +122,34 @@ export const mapN = fs => x => fs.map(T(x))
 export const get_from = o => k => o[k]
 
 export const duad_flip = x => [x[1], x[0]]
+
+export const findIndex = f => xs => {
+	let i = 0
+	for (const x of xs)
+		if (f(x))
+			return i
+		else
+			i++
+	return undefined
+}
+
+export const is = a => b => a === b
+
+export const set = x => new Set(x)
+
+export const inside_set = xs => x => xs.has(x)
+
+export const intersect = a => b => set(filter(inside_set(a))(b))
+
+export const batch = n => function* (xs) {
+	let batch = []
+	for (const x of xs) {
+		batch.push(x)
+		if (batch.length === n) {
+			yield batch
+			batch = []
+		}
+	}
+	if (batch.length > 0)
+		yield batch
+}
