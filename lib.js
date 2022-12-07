@@ -153,3 +153,11 @@ export const batch = n => function* (xs) {
 	if (batch.length > 0)
 		yield batch
 }
+
+export const array = x => Array.from(x)
+
+export const count = xs => {
+	let i = 0
+	for (const x of xs) i++
+	return i
+}
